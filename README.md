@@ -1,371 +1,604 @@
-# Biotech Blueprint 2.0 Deployment Instructions
 
-[Image: image.png]
-## Create a new Master Account
+<h1>Biotech Blueprint 2.0 Deployment Instructions</h1>
 
-Ideally, this is a fresh new account. Control Tower will not work if the master account has already been enrolled into an AWS Organizations relationship as either the payer or a linked account.
+<h2 id='VHY9CAhrS7E'>Create a new Master Account</h2>
 
-## Setup the Control Tower Landing Zone
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/a97a2tUIs8ZnsloZV9h1xQ?a=76Z38CfplUVzTdS0U8cbWJ4t9falQnQPdrGdchXXOoca' id='VHY9CAgfWbG' alt='' width='800' height='495'></img></div><span bgcolor="#ffcdcc" style="background-color:#ffcdcc">INTERNAL AWS ONLY INSTRUCTIONS</span><br/>
 
-Log into your new ‘master’ account with the IAM user credentials you created for yourself.
+<br/>
 
-Navigate to the AWS Control Tower console and click on the “Set up landing zone” button.
-[Image: image.png]
-Provide emails for Log Archive Account and the Audit Account. These need to be email addresses distinct from each other and the email address you used for the main account. Something like [log-archive@yourcompany.com](mailto:log-archive@yourcompany.com) and [audit@yourcompany.com](mailto:audit@yourcompany.com). 
+<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">In order to create a master account for testing the deployment, you need to go through a few extra steps after creating the account in Isengard to give it the necessary fraud score to launch control tower. </span><br/>
 
-Acknowledge the permissions notice before you click the “Setup landing zone” button. 
+<br/>
 
-Get some coffee and set a timer for 60 minutes. It will take up an hour for AWS Control Tower to provision the ‘core’ control tower accounts and setup the other AWS services managed by Control Tower. You can safely close the browser and come back when your timer goes off.  
-[Image: image.png]
+<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">Follow these instructions, but wait to register the child accounts with Isengard until you finish this guide. </span><br/>
 
-## Set AWS SSO password.
+<span bgcolor="#ffcdcc" style="background-color:#ffcdcc"><a href="https://w.amazon.com/bin/view/AWS_Control_Tower_Service/Internal_Testing_and_Deployment/">https://w.amazon.com/bin/view/AWS_Control_Tower_Service/Internal_Testing_and_Deployment/</a></span><br/>
 
-At some point during the AWS Control Tower setup, an email will be sent to the master account’s root email address. 
-[Image: image.png]Click the “Accept Invitation” button and create a password. This username/password will only be used one-time during the setup to create the necessary credentials across the Master, Transit, and Research accounts. We will be changing the AWS SSO directory to Active Directory at the end of this guide, so this username/password will not be used after that.
+<br/>
 
-## Create the Transit Account
+<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">END INTERNAL AWS SPECIFIC INSTRUCTIONS</span><br/>
 
+<h2 id='VHY9CAgpq9k'>Setup the Control Tower Landing Zone</h2>
 
-Once Control Tower has finished setting up the landing zone, its time to provision the Transit Account. The transit account will eventually house the Client VPN Endpoint and Transit Gateway portion of the solution. All future inter-account or inter-vpc networking can and should be configured through the Transit Gateway created by this account. Ideally, only your network administrator will have access to log into the Transit Account’s AWS Console. 
+Log into your new ‘master’ account with the IAM user credentials you created for yourself.<br/>
 
-Navigate to Control Tower in the AWS Console and click on the “Account Factory“ link on the left side, then the ”Provision new account“ button.
+<br/>
 
-[Image: image.png]
-That will redirect you to the AWS Service Catalog product list. Click on the “AWS Control Tower Account Factory”.  
+Navigate to the AWS Control Tower console and click on the “Set up landing zone” button.<br/>
 
-[Image: image.png]
-Click the large “Launch Product” button.
-[Image: image.png]
-Provide a name for the Transit account stack, for example “TransitAccount”.
-[Image: image.png]On the parameters section of the wizard, provide the following parameters:
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/WiVn5Gy9HDsYpwyXKDsf9Q?a=PX5dTOTLUT8DaPPxrvxR6cBU9boBUSsPmMnzOvpabi8a' id='VHY9CAFrt71' alt='' width='800' height='429'></img></div><br/>
 
-|Parameter Name	|Reccomended Value	|Notes	|
-|---	|---	|---	|
-|SSO User Email	|admin-transit@yourcompany.com	|Replace with your company name	|
-|Account Email	|admin-transit@yourcompany.com	|Replace with your company name	|
-|SSO User First Name	|Admin	|	|
-|SSO User Last Name	|Transit	|	|
-|Managed Org Unit	|Custom	|Drop down field. You will only see this option.	|
-|Account Name	|Transit	|	|
+Provide emails for Log Archive Account and the Audit Account. These need to be email addresses distinct from each other and the email address you used for the main account. Something like <a href="mailto:log-archive@yourcompany.com">log-archive@yourcompany.com</a> and <a href="mailto:audit@yourcompany.com">audit@yourcompany.com</a>. <br/>
 
-Proceed through the rest of the wizard just accepting defaults and click the “Launch” button when you get to the Review page of the wizard.
-[Image: image.png]
-You will want to set another timer. It takes about 25 minutes for the account to be created. 
+<br/>
 
-It will look like this once the account has been created:
+Acknowledge the permissions notice before you click the “Setup landing zone” button. <br/>
 
-[Image: image.png]
-You have to wait for this to complete before you proceed. 
+<br/>
 
-## Create the Research Account
+Get some coffee and set a timer for 60 minutes. It will take up an hour for AWS Control Tower to provision the ‘core’ control tower accounts and setup the other AWS services managed by Control Tower. You can safely close the browser and come back when your timer goes off.  <br/>
 
-The Research account is the future home of your bio/chem informatics tools and pipelines. All of the rest of the accounts we have created so far are designed to provide technical separation of duties according to best practices. For example, the master account handles identity, the transit account handles networking, the audit account handles cloudtrail events for all accounts, and the logging account handles cloudwatch logs for all accounts. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/DEB-dGQZGPboadTolJ_r5Q?a=42KLxME7rFFHEQCwjnzxryfRpUVgaMtf4p2FiAL5egga' id='VHY9CAOV0Ms' alt='' width='800' height='429'></img></div><br/>
 
-You will need to follow the same steps you went through for the Transit account to create the Research account. Just use the following parameters instead:
+<h2 id='VHY9CAh3AAt'>Set AWS SSO password.</h2>
 
+At some point during the AWS Control Tower setup, an email will be sent to the master account’s root email address. <br/>
 
-|Parameter Name	|Reccomended Value	|Notes	|
-|---	|---	|---	|
-|SSO User Email	|admin-research@yourcompany.com	|Replace with your company name	|
-|Account Email	|admin-research@yourcompany.com	|Replace with your company name	|
-|SSO User First Name	|Admin	|	|
-|SSO User Last Name	|Research	|	|
-|Managed Org Unit	|Custom	|Drop down field. You will only see this option.	|
-|Account Name	|Research	|	|
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/T_AqEagBjiDHJvzrXCxJsQ?a=IyfWTp64tipoLV23N9v6ibYFjRShNcSSY6UwyOGatcsa' id='VHY9CAsoSnn' alt='' width='800' height='613'></img></div>Click the “Accept Invitation” button and create a password. This username/password will only be used one-time during the setup to create the necessary credentials across the Master, Transit, and Research accounts. We will be changing the AWS SSO directory to Active Directory at the end of this guide, so this username/password will not be used after that.<br/>
 
-## Enable sharing within your AWS Organization
+<h2 id='VHY9CAeQJqF'>Create the Transit Account</h2>
 
-Inside your master account, open the AWS Resource Access Manager (RAM) in the AWS console. AWS RAM is a service that makes sharing resources (like the Transit Gateway that gets created later on) between accounts easier and more secure. 
+<br/>
 
-Go to the ‘Settings’ portion of RAM and check the “Enable sharing within your AWS Organization” and click “Save Settings”
+Once Control Tower has finished setting up the landing zone, its time to provision the Transit Account. The transit account will eventually house the Client VPN Endpoint and Transit Gateway portion of the solution. All future inter-account or inter-vpc networking can and should be configured through the Transit Gateway created by this account. Ideally, only your network administrator will have access to log into the Transit Account’s AWS Console. <br/>
 
-[Image: image.png]
+<br/>
 
-## Elevate permissions in the Transit and Research accounts.
+Navigate to Control Tower in the AWS Console and click on the “Account Factory“ link on the left side, then the ”Provision new account“ button.<br/>
 
-By default, accounts provisioned by Control Tower (excluding the Audit and Logging accounts) don’t automatically grant cross-account administrator privileges to any user or principal. We need to grant administrator permissions to the user you setup in the “Set AWS SSO password” section above for the Transit and Research accounts so that we can start deploying resources into them.
+<br/>
 
-### Grant permissions
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/jQKIwdKHF0zuqMNs9dnkUg?a=ifGpLM8hgiJ4tBPna5YctF2voV0aGQU2w9pzgpNzgewa' id='VHY9CAdpRnF' alt='' width='800' height='429'></img></div><br/>
 
-Go to the AWS SSO service page in the AWS console and go to the “AWS Accounts” tab:
-[Image: image.png]Select the check boxes next to the Research and Transit accounts and click “Assign Users” button.
-[Image: image.png]
-Select the “AWS Control Tower Admin” account and click “Next: Permission sets”
-[Image: image.png]Choose “AWS Administrator Access” and then click the “Finish” button. Should only take a few seconds. “Click the Proceed to AWS Accounts button“
+That will redirect you to the AWS Service Catalog product list. Click on the “AWS Control Tower Account Factory”.  <br/>
 
-### Extend token expiration
+<br/>
 
-The default token expiration for IAM roles assumed by AWS SSO is 1 hour. It may take you longer than an hour to complete the following steps if you take a break along the way. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/acXLgllrglkZypp-sdN_aQ?a=857rvr3QXu6gAn0LDchhEvD50FaA577SCzLB6jwXdrUa' id='VHY9CAALBqS' alt='' width='800' height='429'></img></div><br/>
 
-To extend that expiration, click on the “Permission Sets” tab and click on the “AWSAdministratorAccess” permission set directly. (Don’t click the radio button)
+Click the large “Launch Product” button.<br/>
 
-[Image: image.png]Click the “Edit”button and set the session duration to something greater than an hour. 
-[Image: image.png]It will then ask you which accounts you want to reprovision the policy in. Select the Transit, Master, and Research accounts and click “Reprovision”
-[Image: image.png]
-Should only take a few seconds.
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/Rd1sZFVw6IMyRQv70pfPjA?a=6rF9ifM9mWdPFyg5Ep4Pj4hian1CQ1KpRyDY6pXa4aAa' id='VHY9CA1oV1A' alt='' width='800' height='429'></img></div><br/>
 
-## Prepare the Deployment Environment with AWS Cloud9
+Provide a name for the Transit account stack, for example “TransitAccount”.<br/>
 
-AWS Cloud9 is a web based integrated development environment. You could run all of the same commands below on your local machine, but Cloud 9 comes with many dependencies pre-installed and tends to be a much faster to get started. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/XvD8lpGe8Q-Dze5jxLvZkg?a=FzTkRch0YnduVIawCvHa76JnhHnIFInbLlzal7KC9oka' id='VHY9CAk2aGY' alt='' width='800' height='429'></img></div>On the parameters section of the wizard, provide the following parameters:<br/>
 
-Navigate to the AWS Cloud9 console, and click the “Create environment” button.
-[Image: image.png]
-Follow the creation wizard, but you only need to specify the following parameters. Leave the rest as their defaults. 
+<div data-section-style='13'><table id='VHY9CA8uP7J' title='Sheet1' style='width: 46.4138em'><tbody><tr id='VHY9CASoVjD'><td id='s:VHY9CASoVjD;VHY9CAKOZV4' style='' class='bold'>Parameter Name
 
-Environment Name (Call it something like Biotech Blueprint Deployment Console)
-Instance Type: t2.small
+<br/></td><td id='s:VHY9CASoVjD;VHY9CAVEDpv' style='' class='bold'>Reccomended Value
 
-It will take a few minutes, but you will eventually be presented with the following development environment:
-[Image: image.png]
-Notice the terminal window at the bottom of the IDE. Run the following commands. You may get warnings, but they can be ignored. We are installing the AWS Cloud Development Kit (CDK) and pulling down the Biotech Blueprint source code. 
+<br/></td><td id='s:VHY9CASoVjD;VHY9CAW2dH0' style='' class='bold'>Notes
 
-```
-git clone https://github.com/paulu-aws/biotechblueprint.git
-cd biotechblueprint
-./prepCloud9env.sh
-```
+<br/></td></tr><tr id='VHY9CAsShel'><td id='s:VHY9CAsShel;VHY9CAKOZV4' style=''>SSO User Email
 
-The final output of the prepCloud9Env script is the path to the AWS credentials file. Click on the file name, and chose “Open” to open up the AWS Credentials File.
-[Image: image.png]
-## Prepare Your AWS Credentials File
+<br/></td><td id='s:VHY9CAsShel;VHY9CAVEDpv' style=''>admin-transit@yourcompany.com
 
-Go ahead and delete the contents of the credentials file. 
+<br/></td><td id='s:VHY9CAsShel;VHY9CAW2dH0' style=''>Replace with your company name
 
-You may get a warning when Cloud9 detects you have changed this file. One of the features of Cloud9 is automatically refreshing this file with temporary keys for the IAM user assigned to Cloud9. Because we are deploying things across multiple accounts, we want to disable this automatic refresh. When the warning prompt appears, click the “permanantly disable refresh button”
+<br/></td></tr><tr id='VHY9CA6frUf'><td id='s:VHY9CA6frUf;VHY9CAKOZV4' style=''>Account Email
 
-We are going to be deploying lots of stuff in the Master, Transit, and Research account. We need to prepare this credentials file that will give the Cloud9 environment permissions.
+<br/></td><td id='s:VHY9CA6frUf;VHY9CAVEDpv' style=''>admin-transit@yourcompany.com
 
-### **Log into your SSO portal.**
+<br/></td><td id='s:VHY9CA6frUf;VHY9CAW2dH0' style=''>Replace with your company name
 
-From the master account, visit the AWS SSO page in the console again. When the AWS SSO Dashboard comes up, visit the “User portal URL” listed at the bottom of the dashboard and log in with the username/password that you used in the “Set AWS SSO password.” section above.
+<br/></td></tr><tr id='VHY9CAy2m3g'><td id='s:VHY9CAy2m3g;VHY9CAKOZV4' style=''>SSO User First Name
 
-[Image: image.png]
-You should see something like the following once you have logged in.
-[Image: image.png]
-Expand the "Research" account, and click on the"Command line or programmatic access" button on the "AWSAdministratorAccess" row. 
+<br/></td><td id='s:VHY9CAy2m3g;VHY9CAVEDpv' style=''>Admin
 
-[Image: image.png]
-Hover over the "Option 2" and copy that text. 
+<br/></td><td id='s:VHY9CAy2m3g;VHY9CAW2dH0' style=''>
 
-[Image: image.png]
-That text will look something like this:
+<br/></td></tr><tr id='VHY9CARoa6o'><td id='s:VHY9CARoa6o;VHY9CAKOZV4' style=''>SSO User Last Name
 
-`[111111111111_AWSOrganizationsFullAccess]`
-`aws_access_key_id = ASIA....P5MC4E`
-`aws_secret_access_key = lZfRUkA.....1daLxqcSOx0E`
-`aws_session_token = AgoJb3JpZ............0grr1`
+<br/></td><td id='s:VHY9CARoa6o;VHY9CAVEDpv' style=''>Transit
 
-Paste that text into the open credentials file in the Cloud9 environment located at `~/.aws/credentials`
+<br/></td><td id='s:VHY9CARoa6o;VHY9CAW2dH0' style=''>
 
-Replace the `[111111111111_AWSOrganizationsFullAccess] `with `[research]`
+<br/></td></tr><tr id='VHY9CASM1dY'><td id='s:VHY9CASM1dY;VHY9CAKOZV4' style=''>Managed Org Unit
 
-Do the same for the transit and master account such that your aws credentials file ends up looking like this: 
+<br/></td><td id='s:VHY9CASM1dY;VHY9CAVEDpv' style=''>Custom
 
+<br/></td><td id='s:VHY9CASM1dY;VHY9CAW2dH0' style=''>Drop down field. You will only see this option.
 
-```
-[research]
-aws_access_key_id = ASIAR7.....GUMM6
-aws_secret_access_key = kN4LVgE......oKidZ+3BxMmyyjwXl8PjD9
-aws_session_token = Ago............Jc
-region=us-east-1
+<br/></td></tr><tr id='VHY9CArf8SS'><td id='s:VHY9CArf8SS;VHY9CAKOZV4' style=''>Account Name
 
-[master]
-aws_access_key_id = ASIAXZ...6GRA6U
-aws_secret_access_key = pj4EMH......MsXmjdiWRg
-aws_session_token = AgoJ............bD
-region=us-east-1
+<br/></td><td id='s:VHY9CArf8SS;VHY9CAVEDpv' style=''>Transit
 
-[transit]
-aws_access_key_id = ASIA3Q...X4LIPYBL
-aws_secret_access_key = D+xfSxawa......gnXCiEYAh
-aws_session_token = AgoJb3Jpujc............NU7ZQETpGyO2u
-region=us-east-1
-```
+<br/></td><td id='s:VHY9CArf8SS;VHY9CAW2dH0' style=''>
 
-Make sure you add region=us-east-1, or whatever your desired home region is to each profile. 
+<br/></td></tr></tbody></table></div>Proceed through the rest of the wizard just accepting defaults and click the “Launch” button when you get to the Review page of the wizard.<br/>
 
-Save the credentials file when you are done.
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/ojMliEkWEhAADg4NtcGt2g?a=AJ5skHkpaDJfYU3veGxrT5kkORjWdkfaVJaE5BaaPMoa' id='VHY9CASekwb' alt='' width='800' height='429'></img></div><br/>
 
-## Set your deployment preferences:
+You will want to set another timer. It takes about 25 minutes for the account to be created. <br/>
 
-Open the file cdk.json at `~/biotechblueprint/cdk.json`
+<br/>
 
-This file is where various context values are set for the CDK CLI deployment. The only value that you NEED to set is `corporateDnsApex`. That value needs to map to your company’s apex domain. If your company name is ExampleCorp and you own the domain examplecorp.com, use that.
+It will look like this once the account has been created:<br/>
 
-The only other value you might want to change is `corporateNetBiosShortName`. This is used with Active Directory as the domain’s short name. If you don’t know what this is or don’t care, just leave the default value of `corp`.
+<br/>
 
-Leave the rest of the values alone. The deployment script will automatically populate them. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/UELMsRUs8B8SnUhv8U3m9g?a=sbGyyVfWSXAxaCRFkf1ygo4SF30JoE6US5F2stGRCGoa' id='VHY9CAgUirI' alt='' width='800' height='466'></img></div><br/>
 
-```
-{
-  "app": "npx ts-node bin/bb-20.ts",
-  "requireApproval": "never",
-  "context": {
-    
-    "corporateDnsApex" : "examplecorp.com",
-    "corporateNetBiosShortName": "corp",
-    
-    "transitGatewayRouteTableSecretArn": "XXXXXXXXXXXX",
-    "researchTgAttachmentSecretArn": "XXXXXXXXXXXX",
-    "transitGatewaySecretArn": "XXXXXXXXXXXX",
-    "researchVpcCidrSecretArn": "XXXXXXXXXXXX",
-    "identityTgAttachmentSecretArn": "XXXXXXXXXXXX",
-    "identityVpcCidrSecretArn": "XXXXXXXXXXXX",
-    "identityAccountAdConnectorSecretArn": "XXXXXXXXXXXX",
-    "identityAccountAdConnectorSecretKeyArn": "XXXXXXXXXXXX",
-    "masterAcctId": "XXXXXXXXXXXX",
-    "transitAcctId": "XXXXXXXXXXXXX",
-    "researchAcctId": "XXXXXXXXXXXXX",
-    "orgArn": "XXXXXXXXXXXXXXX"
-  }
-}
-```
+You have to wait for this to complete before you proceed. <br/>
 
-## Run deployBiotechBlueprint.sh
+<h2 id='VHY9CACl97i'>Create the Research Account</h2>
 
-Now you just need to run the following command 
+The Research account is the future home of your bio/chem informatics tools and pipelines. All of the rest of the accounts we have created so far are designed to provide technical separation of duties according to best practices. For example, the master account handles identity, the transit account handles networking, the audit account handles cloudtrail events for all accounts, and the logging account handles cloudwatch logs for all accounts. <br/>
 
-`./deployBiotechBlueprint.sh`
+<br/>
 
-This script will kick off a number of AWS CDK deployment commands that will stand up all of the components in the Transit, Master, and Research accounts. You will want to set another timer. The deployment will take approximately 1 hour. For the record, 40 minutes of that is waiting for Microsoft’s Active Directory to boot up.
+You will need to follow the same steps you went through for the Transit account to create the Research account. Just use the following parameters instead:<br/>
 
+<br/>
 
-## Connect to the VPN 
+<div data-section-style='13'><table id='VHY9CA6nmkQ' title='Sheet2' style='width: 49.4138em'><tbody><tr id='VHY9CAXY69S'><td id='s:VHY9CAXY69S;VHY9CAfqRXK' style='' class='bold'>Parameter Name
 
-The previous deployment script sets up Active Directory in the master account, AWS AD Connectors in the Transit and Research accounts, and an Active Directory integrated Client VPN Endpoint in the Transit account. 
+<br/></td><td id='s:VHY9CAXY69S;VHY9CAkEvlY' style='' class='bold'>Reccomended Value
 
-In order to manage users and groups, you need to first connect to the VPN Endpoint which will allow you to route into the Identity stack. From there, you can directly connect the Active Directory domain controllers from your local machine or RDP into the “Domain Controller Console” host and administer AD from there. 
+<br/></td><td id='s:VHY9CAXY69S;VHY9CAL9fxo' style='' class='bold'>Notes
 
-### Download Client VPN Configuration File
+<br/></td></tr><tr id='VHY9CAZCb3B'><td id='s:VHY9CAZCb3B;VHY9CAfqRXK' style=''>SSO User Email
 
-The deployment script will automatically output the TransitVPN.ovpn file @ `~/environment/TransitVPN.ovpn`. You can right click on that file in Cloud9 to download it. You can also download again from the AWS web console by locating the Client VPN Endpoint in the Transit Account’s VPC console, selecting it, and clicking the “Download Client Configuration” button.
+<br/></td><td id='s:VHY9CAZCb3B;VHY9CAkEvlY' style=''>admin-research@yourcompany.com
 
-Location of the TransitVPN.ovpn config file in Cloud9:
-[Image: image.png]For reference, you can also download the same client configuration file from the AWS VPC console’s "Client VPN Endpoints" page. 
-[Image: image.png]
-### Download Client VPN Software  and import the CONFIGURATION file
+<br/></td><td id='s:VHY9CAZCb3B;VHY9CAL9fxo' style=''>Replace with your company name
 
-You will first need a Client VPN application installed on your local machine. [These instructions have links to download](https://docs.aws.amazon.com/vpn/latest/clientvpn-user/connect.html) various compatible VPN Client tools depending on your OS (Windows/Android/iOS/MacOS/Ubuntu). Those instructions also tell you how to import a configuration file. Follow those steps with the TransitVPN.ovpn file you just downloaded on your local machine. 
+<br/></td></tr><tr id='VHY9CAaTYyF'><td id='s:VHY9CAaTYyF;VHY9CAfqRXK' style=''>Account Email
 
-### Connect to the VPN
+<br/></td><td id='s:VHY9CAaTYyF;VHY9CAkEvlY' style=''>admin-research@yourcompany.com
 
-Go ahead and connect to the VPN. You will be prompted to login with credentials. 
-[Image: image.png]
-By default, AWS Directory Services provisions a single username, “admin”, that has full domain controller permissions. The Biotech Blueprint deployment script has automatically given this admin permissions to log into this domain. To obtain the password, log into the Master Account and go to the AWS Secrets Manager service page.
-[Image: image.png] Click on the `ADAdminCreds` secret 
+<br/></td><td id='s:VHY9CAaTYyF;VHY9CAL9fxo' style=''>Replace with your company name
 
-Scroll down to the “Secret value” section and click the “Retrieve secret value” button:
-[Image: image.png]
-You will see the username/password combo that you should use log into the VPN. 
-[Image: image.png]
-You are now connected to the cloud! Now lets connect to that domain controller and start adding users/groups that are relevant to your company. 
+<br/></td></tr><tr id='VHY9CAWHKkr'><td id='s:VHY9CAWHKkr;VHY9CAfqRXK' style=''>SSO User First Name
 
+<br/></td><td id='s:VHY9CAWHKkr;VHY9CAkEvlY' style=''>Admin
 
-## Create your desired AD Users and Groups
+<br/></td><td id='s:VHY9CAWHKkr;VHY9CAL9fxo' style=''>
 
-At this point, you can directly connect your local machine to Active Directory and manage it if you happen to have the AD administration tools already installed on your local machine. For simplicity sake, the Biotech Blueprint deployment script launches a small instance in the identity stack’s private subnet that already has the AD management tools installed and is already joined to the domain. All you need to do is RDP into that host. Keep in mind, this host is in a private subnet only routable by clients that are connected to the VPN.
+<br/></td></tr><tr id='VHY9CAIrKWj'><td id='s:VHY9CAIrKWj;VHY9CAfqRXK' style=''>SSO User Last Name
 
-To connect to the host, log into the master account AWS console and visit the EC2 service page. Under “Instances”, you will see the “Domain Controller Console”. Right click on that instance and choose connect. 
+<br/></td><td id='s:VHY9CAIrKWj;VHY9CAkEvlY' style=''>Research
 
-Todo:// need to add instructions on adding RDP ingress rule to security group attached to domain controler
-[Image: image.png]
-Click on the “Download Remote Desktop File” and open it with your remote desktop client:
-[Image: image.png]You may get a warning when you connect. Go ahead and click the connect button.
+<br/></td><td id='s:VHY9CAIrKWj;VHY9CAL9fxo' style=''>
 
-[Image: image.png]
-You need to connect with the same AD credentials that you logged into the Client VPN Endpoint with. Your RDP client may default the user to your local machine’s current user. Click the “More choices” link and “Use a different account” option.
-[Image: image.png]
-Your username needs to be a combination of your NetBIOS shortname and the “admin” username. You would have specified the shortname as the `corporateNetBiosShortName` value in the “Set your deployment preferences” section above. If you left the default value, the username will be: “corp\admin”. 
+<br/></td></tr><tr id='VHY9CAluuGq'><td id='s:VHY9CAluuGq;VHY9CAfqRXK' style=''>Managed Org Unit
 
-Your password is the same password you used to log into the VPN as described in the “Connect to the VPN” section above. You can get that same value again from Secrets Manager in the master account if you need to.
+<br/></td><td id='s:VHY9CAluuGq;VHY9CAkEvlY' style=''>Custom
 
-Click OK and you will get automatically logged into the Domain Controller Console instance. 
+<br/></td><td id='s:VHY9CAluuGq;VHY9CAL9fxo' style=''>Drop down field. You will only see this option.
 
-When the instance comes up, click the Windows icon in the bottom left corner and type in “Active Directory Users and Computers” and open the app. 
-[Image: image.png]
-The snapin will automatically connect to Active Directory as the domain administrator (because you are logged in as the domain admin).
+<br/></td></tr><tr id='VHY9CAYs1Ik'><td id='s:VHY9CAYs1Ik;VHY9CAfqRXK' style=''>Account Name
 
-To start creating groups/users, expand the tree down from “yourcompany.com” to “yourshortname” to “Users”. For example:
+<br/></td><td id='s:VHY9CAYs1Ik;VHY9CAkEvlY' style=''>Research
 
-[Image: image.png]
-You will see 4 items in the list:
+<br/></td><td id='s:VHY9CAYs1Ik;VHY9CAL9fxo' style=''>
 
+<br/></td></tr></tbody></table></div><h2 id='VHY9CASClwc'>Enable sharing within your AWS Organization</h2>
 
-* Admin - This USER is created automatically by AWS directory services and the user you are currently logged in as.
-* svc_adconnector - This USER is a service account used by the AD Connectors in the Transit and Research accounts to connect to the domain controller.
-* Connectors - This GROUP gives permissions for the AD connectors in the Transit and Research accounts.
-* CorporateVpnUsers - This GROUP gives members permissions to connect to the Transit VPN solution. You will notice Admin is already a member of this group.
+Inside your master account, open the AWS Resource Access Manager (RAM) in the AWS console. AWS RAM is a service that makes sharing resources (like the Transit Gateway that gets created later on) between accounts easier and more secure. <br/>
 
-At this point, you can start creating groups and individual users as you see fit. 
+<br/>
 
-Start by creating a user for yourself. 
+Go to the ‘Settings’ portion of RAM and check the “Enable sharing within your AWS Organization” and click “Save Settings”<br/>
 
-If you want to allow someone else to connect to the VPN, create a user for them and add them to the CorporateVpnUsers group.
+<br/>
 
-In the next step, we are going to give AWS permissions based on the AD groups you create. We recommend that you create the following groups and add the user you created for yourself to them.
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/tgFFemcZ8G9jFO2fcQxEkQ?a=PrZ6yRIEHTmXKNcgsxa2kxs0aDqZFl4zUN6jkqakWlAa' id='VHY9CAnYvD9' alt='' width='800' height='429'></img></div><br/>
 
-ResearchAccountAdmins
-ResearchAccountUsers
-TransitAccountAdmins
-MasterAccountAdmins
-AuditAccountAdmins
-LoggingAccountAdmins
+<h2 id='VHY9CANPCAY'>Elevate permissions in the Transit and Research accounts.</h2>
 
-We will associate these groups to AWS IAM  permissions in the next step.
+By default, accounts provisioned by Control Tower (excluding the Audit and Logging accounts) don’t automatically grant cross-account administrator privileges to any user or principal. We need to grant administrator permissions to the user you setup in the “Set AWS SSO password” section above for the Transit and Research accounts so that we can start deploying resources into them.<br/>
 
-For the most part, non-IT staff will never need AWS permissions on the Transit/Master/Audit/Logging accounts and should likely never be added to those groups. 
+<h3 id='VHY9CABy3yX'>Grant permissions</h3>
 
+Go to the AWS SSO service page in the AWS console and go to the “AWS Accounts” tab:<br/>
 
-## Switch AWS SSO to use AWS Directory Services
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/P_rHXkhdMKNvfIQNoewrmg?a=uzA83bxJ1NFhaqF3x9Sz9H2fNnm4kdc6vYxI85g0gpYa' id='VHY9CAgYytX' alt='' width='800' height='429'></img></div>Select the check boxes next to the Research and Transit accounts and click “Assign Users” button.<br/>
 
-Up to this point, the AWS SSO service that AWS Control Tower setup for you in the master account has been using the AWS SSO Directory. Because we are maintaining users/groups in Active Directory, we are going to change AWS SSO to use AD instead. Log into the master account and navigate to the AWS SSO service page. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/xiVVYo1cI9VY8X-J2M9caA?a=aUMDxdrFWOwrzTQA5sn4f8FrkNe8o0o6AQS39dRjnboa' id='VHY9CAF3RXL' alt='' width='800' height='429'></img></div><br/>
 
-Click on the “Directory” section.
+Select the “AWS Control Tower Admin” account and click “Next: Permission sets”<br/>
 
-[Image: image.png]
-Click on the “Change directory” link.
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/MGpoVq5Nnm8sTuxqazRyIQ?a=3amjTkCUIr0WZ14kSaoMCtv16WVQPLD8BzPRDQOx70Ia' id='VHY9CAuQZQ4' alt='' width='800' height='429'></img></div>Choose “AWS Administrator Access” and then click the “Finish” button. Should only take a few seconds. “Click the Proceed to AWS Accounts button“<br/>
 
-Choose “Microsoft AD directory”.
+<h3 id='VHY9CAPJq55'>Extend token expiration</h3>
 
-The identity stack’s AD environment should be prepopulated in the “Existing directories" drop down. Click Next.
+The default token expiration for IAM roles assumed by AWS SSO is 1 hour. It may take you longer than an hour to complete the following steps if you take a break along the way. <br/>
 
-[Image: image.png]
-You will get a warning that that all existing permissions will be removed. Type “CONFIRM” to acknowledge this. 
+<br/>
 
-It should only take a few seconds. You should see the following if it completed successfully. 
+To extend that expiration, click on the “Permission Sets” tab and click on the “AWSAdministratorAccess” permission set directly. (Don’t click the radio button)<br/>
 
-[Image: image.png]
-Click on the “Proceed to the directory” button. Then navigate the “AWS accounts” page in the AWS SSO console.
-[Image: image.png]
-Its from here that we assign Active Directory users or groups IAM permissions. Lets start off giving access to the master account. 
+<br/>
 
-Check the box next to the master account on the list and click the “Assign users” button. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/RrG3ew9mSYgnaUme7b6C9Q?a=2qtkuNM3FXhgc7RERfaM2tD1OJdtNpS3a34CJ9WgX78a' id='VHY9CA1vBT5' alt='' width='800' height='429'></img></div>Click the “Edit”button and set the session duration to something greater than an hour. <br/>
 
-You will see a search box come up to search for group names. Search for the group name you created earlier that you want to give master account admin privileges too. If you followed the recommended group names above, it would be “MasterAccountAdmins”. (Make sure you added yourself to that group  as described in the “Create your desired AD users and groups“ section above) Then click ”Next: Permissions sets“.
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/R1NXBTolbnZOg1sP74ITlQ?a=WgPdz01v2GWSjiyIOaKIa0IEl0Td2udTMiGfASN7i9Ea' id='VHY9CAHemyk' alt='' width='800' height='429'></img></div>It will then ask you which accounts you want to reprovision the policy in. Select the Transit, Master, and Research accounts and click “Reprovision”<br/>
 
-[Image: image.png]
-Now we are about to assign permissions to users of that group on the account we selected. In order to give members of this group full administrator access to the account, we just need to check the “AWSAdministratorAccess” policy and click finish. 
-[Image: image.png]
-As you can see, there are other types of pre-built permission sets that you can assign to users or create your own. You can also select multiple permissions sets for the group. If a users has multiple permissions sets, they will see an option to login to the account for each permission set the belong to. For example, you may want to give users the option of escalating their privileges or emulating another role’s permissions. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/GgUlhoEi--YKiAhYDzOgUA?a=qTDoaWXyFx2zeWokwaK9H2RU5NjRCQpy1IeyaD7dAVMa' id='VHY9CADZjOi' alt='' width='800' height='429'></img></div><br/>
 
-Repeat this process for the Transit, Research, Audit, and Log Archive accounts based on the groups or users you created in Active Directory. 
+Should only take a few seconds.<br/>
 
-## Log into your AWS Portal and conquer
+<h2 id='VHY9CAxs9ZB'>Prepare the Deployment Environment with AWS Cloud9</h2>
 
-Go back to the AWS SSO Dashboard and copy the “User portal URL”.
+AWS Cloud9 is a web based integrated development environment. You could run all of the same commands below on your local machine, but Cloud 9 comes with many dependencies pre-installed and tends to be a much faster to get started. <br/>
 
-This URL is the entry point for for all users who need access to the AWS Console, CLI, or SDKs. 
-[Image: image.png]
-Go ahead and visit that URL and login with the Active Directory username and password you created for yourself earlier. 
-[Image: image.png]Expand the various accounts to access the management console or obtain AWS access keys and secret keys. In the image below, all of the accounts are listed as an illustration. If the logged in user only had access to one account, they would only see one account listed (or get logged in automatically).
-[Image: image.png]
-## Giving account access to other users
+<br/>
 
-In order to allow others to connect to the VPN or the AWS console you need to provide them with 3 things:
+Navigate to the AWS Cloud9 console, and click the “Create environment” button.<br/>
 
-* Active Directory Credentials - Whatever username and password you created for them
-* For VPN Access, give them the same TransitVPN.ovpn file that you downloaded earlier and connected with. That file contains no passwords and can be shared safely among members of your company. Each user will be logging in with their own unique AD credentials you created for them.
-* For AWS Console access, give them the “User portal URL” from the AWS SSO page that you just logged in with. They will need to log in with their AD credentials. 
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/Jjern2OYcq8RiWnFtgRIbA?a=ZPu6atam7fB7EsTyCo5r8YNZfYTSq9agbYP4cIwyqfwa' id='VHY9CArmYWM' alt='' width='800' height='429'></img></div><br/>
 
+Follow the creation wizard, but you only need to specify the following parameters. Leave the rest as their defaults. <br/>
 
+<br/>
 
+Environment Name (Call it something like Biotech Blueprint Deployment Console)<br/>
+
+Instance Type: t2.small<br/>
+
+<br/>
+
+It will take a few minutes, but you will eventually be presented with the following development environment:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/KwVV8L5vkBHOcdhVfrOIrQ?a=cGbuukPQuaTW0408hV2Hht8nd2Ey30CpiLaHavaFmiYa' id='VHY9CALYQ7u' alt='' width='800' height='429'></img></div><br/>
+
+Notice the terminal window at the bottom of the IDE. Run the following commands. You may get warnings, but they can be ignored. We are installing the AWS Cloud Development Kit (CDK) and pulling down the Biotech Blueprint source code. <br/>
+
+<pre id='VHY9CAgzKUm'>git clone <a href="https://github.com/paulu-aws/biotechblueprint.git">https://github.com/paulu-aws/biotechblueprint.git</a><br>cd biotechblueprint<br>./prepCloud9env.sh</pre>
+
+The final output of the prepCloud9Env script is the path to the AWS credentials file. Click on the file name, and chose “Open” to open up the AWS Credentials File.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/BzYP12hI_gGBEzUtuaP8EQ?a=nTp3BaWkaBnFsgR7lY6aKoT7pADQgY90LL8exKmNxTYa' id='VHY9CAeNiJ1' alt='' width='800' height='470'></img></div><h2 id='VHY9CAU5NKa'>Prepare Your AWS Credentials File</h2>
+
+Go ahead and delete the contents of the credentials file. <br/>
+
+<br/>
+
+You may get a warning when Cloud9 detects you have changed this file. One of the features of Cloud9 is automatically refreshing this file with temporary keys for the IAM user assigned to Cloud9. Because we are deploying things across multiple accounts, we want to disable this automatic refresh. When the warning prompt appears, click the “permanantly disable refresh button”<br/>
+
+<br/>
+
+We are going to be deploying lots of stuff in the Master, Transit, and Research account. We need to prepare this credentials file that will give the Cloud9 environment permissions.<br/>
+
+<h3 id='VHY9CAPNj9Z'><b><span style="color:#333333" textcolor="#333333">Log into your SSO portal.</span></b></h3>
+
+<span style="color:#333333" textcolor="#333333">From the master account, visit the AWS SSO page in the console again. When the AWS SSO Dashboard comes up, visit the “User portal URL” listed at the bottom of the dashboard and log in with the username/password that you used in the “Set AWS SSO password.” section above.</span><br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/cOk52pCm-dW73CVVpltGbQ?a=ZHq7iqy5L6aPOnyPDcVh8GmckcFaIaTuWz4fHy4htxca' id='VHY9CAcHBIH' alt='' width='800' height='429'></img></div><br/>
+
+You should see something like the following once you have logged in.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/iNJHX3C8CutuSt99NDjQgA?a=DVBQV8PJwzaTCA40vpC0OKMtfaDVOIVYFRYiNDr6WaYa' id='VHY9CAe06oO' alt='' width='800' height='466'></img></div><br/>
+
+Expand the "Research" account, and click on the"Command line or programmatic access" button on the "AWSAdministratorAccess" row. <br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/XDwwIgaeKhe7IodhNXZ4rg?a=eyIaGjuP7kR6lY33O3sTd4VngXn96DRgi5pyaaKiqNMa' id='VHY9CAGD8H2' alt='' width='800' height='429'></img></div><br/>
+
+Hover over the "Option 2" and copy that text. <br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/iqPZ5Xcxdyr1AfehgWE_-w?a=lwdiNclu6Gk5hks1DNUruxR4xSOnJzJuqetRn9ftEvca' id='VHY9CA6UiRK' alt='' width='800' height='466'></img></div><br/>
+
+That text will look something like this:<br/>
+
+<br/>
+
+<code>[111111111111_AWSOrganizationsFullAccess]</code><br/>
+
+<code>aws_access_key_id = ASIA....P5MC4E</code><br/>
+
+<code>aws_secret_access_key = lZfRUkA.....1daLxqcSOx0E</code><br/>
+
+<code>aws_session_token = AgoJb3JpZ............0grr1</code><br/>
+
+<br/>
+
+Paste that text into the open credentials file in the Cloud9 environment located at <code>~/.aws/credentials</code><br/>
+
+<br/>
+
+Replace the <code>[111111111111_AWSOrganizationsFullAccess] </code>with <code>[research]</code><br/>
+
+<br/>
+
+Do the same for the transit and master account such that your aws credentials file ends up looking like this: <br/>
+
+<br/>
+
+<pre id='VHY9CAuvtsI'>[research]<br>aws_access_key_id = ASIAR7.....GUMM6<br>aws_secret_access_key = kN4LVgE......oKidZ+3BxMmyyjwXl8PjD9<br>aws_session_token = Ago............Jc<br>region=us-east-1<br><br>[master]<br>aws_access_key_id = ASIAXZ...6GRA6U<br>aws_secret_access_key = pj4EMH......MsXmjdiWRg<br>aws_session_token = AgoJ............bD<br>region=us-east-1<br><br>[transit]<br>aws_access_key_id = ASIA3Q...X4LIPYBL<br>aws_secret_access_key = D+xfSxawa......gnXCiEYAh<br>aws_session_token = AgoJb3Jpujc............NU7ZQETpGyO2u<br>region=us-east-1</pre>
+
+Make sure you add region=us-east-1, or whatever your desired home region is to each profile. <br/>
+
+<br/>
+
+Save the credentials file when you are done.<br/>
+
+<h2 id='VHY9CAyzLmI'>Set your deployment preferences:</h2>
+
+Open the file cdk.json at <code>~/biotechblueprint/cdk.json</code><br/>
+
+<br/>
+
+This file is where various context values are set for the CDK CLI deployment. The only value that you NEED to set is <code>corporateDnsApex</code>. That value needs to map to your company’s apex domain. If your company name is ExampleCorp and you own the domain examplecorp.com, use that.<br/>
+
+<br/>
+
+The only other value you might want to change is <code>corporateNetBiosShortName</code>. This is used with Active Directory as the domain’s short name. If you don’t know what this is or don’t care, just leave the default value of <code>corp</code>.<br/>
+
+<br/>
+
+Leave the rest of the values alone. The deployment script will automatically populate them. <br/>
+
+<pre id='VHY9CAyyTGq'>{<br>  "app": "npx ts-node bin/bb-20.ts",<br>  "requireApproval": "never",<br>  "context": {<br>    <br>    "corporateDnsApex" : "examplecorp.com",<br>    "corporateNetBiosShortName": "corp",<br>    <br>    "transitGatewayRouteTableSecretArn": "XXXXXXXXXXXX",<br>    "researchTgAttachmentSecretArn": "XXXXXXXXXXXX",<br>    "transitGatewaySecretArn": "XXXXXXXXXXXX",<br>    "researchVpcCidrSecretArn": "XXXXXXXXXXXX",<br>    "identityTgAttachmentSecretArn": "XXXXXXXXXXXX",<br>    "identityVpcCidrSecretArn": "XXXXXXXXXXXX",<br>    "identityAccountAdConnectorSecretArn": "XXXXXXXXXXXX",<br>    "identityAccountAdConnectorSecretKeyArn": "XXXXXXXXXXXX",<br>    "masterAcctId": "XXXXXXXXXXXX",<br>    "transitAcctId": "XXXXXXXXXXXXX",<br>    "researchAcctId": "XXXXXXXXXXXXX",<br>    "orgArn": "XXXXXXXXXXXXXXX"<br>  }<br>}</pre>
+
+<h2 id='VHY9CAHdQlO'>Run deployBiotechBlueprint.sh</h2>
+
+Now you just need to run the following command <br/>
+
+<br/>
+
+<code>./deployBiotechBlueprint.sh</code><br/>
+
+<br/>
+
+This script will kick off a number of AWS CDK deployment commands that will stand up all of the components in the Transit, Master, and Research accounts. You will want to set another timer. The deployment will take approximately 1 hour. For the record, 40 minutes of that is waiting for Microsoft’s Active Directory to boot up.<br/>
+
+<br/>
+
+<h2 id='VHY9CAkAZ8g'>Connect to the VPN </h2>
+
+The previous deployment script sets up Active Directory in the master account, AWS AD Connectors in the Transit and Research accounts, and an Active Directory integrated Client VPN Endpoint in the Transit account. <br/>
+
+<br/>
+
+In order to manage users and groups, you need to first connect to the VPN Endpoint which will allow you to route into the Identity stack. From there, you can directly connect the Active Directory domain controllers from your local machine or RDP into the “Domain Controller Console” host and administer AD from there. <br/>
+
+<h3 id='VHY9CAQfiIV'>Download Client VPN Configuration File</h3>
+
+The deployment script will automatically output the TransitVPN.ovpn file @ <code>~/environment/TransitVPN.ovpn</code>. You can right click on that file in Cloud9 to download it. You can also download again from the AWS web console by locating the Client VPN Endpoint in the Transit Account’s VPC console, selecting it, and clicking the “Download Client Configuration” button.<br/>
+
+<br/>
+
+Location of the TransitVPN.ovpn config file in Cloud9:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/VN6NyCe4PFHTiU93sl9pmQ?a=Eo95nLOXQsWxYpBauE48s5aR1MG8a96GBWoft15DxuIa' id='VHY9CA6k9kN' alt='' width='800' height='466'></img></div>For reference, you can also download the same client configuration file from the AWS VPC console’s "Client VPN Endpoints" page. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/HmtUeeRQRCDt2GpmxHKsWA?a=aMIKzBpr9QJajVhmeI7arteifUFXNZfcMWa0Wyjp75Aa' id='VHY9CA2IFmZ' alt='' width='800' height='429'></img></div><h3 id='VHY9CA3GxkI'>Download Client VPN Software  and import the CONFIGURATION file</h3>
+
+You will first need a Client VPN application installed on your local machine. <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-user/connect.html">These instructions have links to download</a> various compatible VPN Client tools depending on your OS (Windows/Android/iOS/MacOS/Ubuntu). Those instructions also tell you how to import a configuration file. Follow those steps with the TransitVPN.ovpn file you just downloaded on your local machine. <br/>
+
+<h3 id='VHY9CAfLC18'>Connect to the VPN</h3>
+
+Go ahead and connect to the VPN. You will be prompted to login with credentials. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/kuJkz1g7K5fw5TYtIjzpDQ?a=GrKNheK3F6XIlcLYQpj2hjStsu55IuNVZRpwnEukkosa' id='VHY9CApxbHs' alt=''></img></div><br/>
+
+By default, AWS Directory Services provisions a single username, “admin”, that has full domain controller permissions. The Biotech Blueprint deployment script has automatically given this admin permissions to log into this domain. To obtain the password, log into the Master Account and go to the AWS Secrets Manager service page.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/UmActxtymNaPK5zLIRjfYg?a=gdNZUq3Tp5ADV8D2ki1OjYFpxqgaozagqfQK849LdHsa' id='VHY9CAKlUee' alt='' width='800' height='429'></img></div> Click on the <code>ADAdminCreds</code> secret <br/>
+
+<br/>
+
+Scroll down to the “Secret value” section and click the “Retrieve secret value” button:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/L7RuXOKYh8xqv1jmQWyo2A?a=apWABgKqgIhrK4BwLRrza1ICf2xDmaIAaVwLmYzKDAMa' id='VHY9CAGfC7V' alt='' width='800' height='429'></img></div><br/>
+
+You will see the username/password combo that you should use log into the VPN. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/bCSSuMOXnULNO20gb8iMYQ?a=T7aZFnNaIuGOYYmMb2fmYKObgYV5bcPNN0OF77bACx4a' id='VHY9CA5OHKB' alt=''></img></div><br/>
+
+You are now connected to the cloud! Now lets connect to that domain controller and start adding users/groups that are relevant to your company. <br/>
+
+<br/>
+
+<h2 id='VHY9CACxj8O'>Create your desired AD Users and Groups</h2>
+
+At this point, you can directly connect your local machine to Active Directory and manage it if you happen to have the AD administration tools already installed on your local machine. For simplicity sake, the Biotech Blueprint deployment script launches a small instance in the identity stack’s private subnet that already has the AD management tools installed and is already joined to the domain. All you need to do is RDP into that host. Keep in mind, this host is in a private subnet only routable by clients that are connected to the VPN.<br/>
+
+<br/>
+
+To connect to the host, log into the master account AWS console and visit the EC2 service page. Under “Instances”, you will see the “Domain Controller Console”. Right click on that instance and choose connect. <br/>
+
+<br/>
+
+Todo:// need to add instructions on adding RDP ingress rule to security group attached to domain controler<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/hYM1mYdqUMsKc5QSqrrNBw?a=3GzvLehJLdzlw6aZWhSEv529uxceXkb5svtCZV51Vr8a' id='VHY9CALB9hV' alt='' width='800' height='429'></img></div><br/>
+
+Click on the “Download Remote Desktop File” and open it with your remote desktop client:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/-5dT1RgBjBHYEYh-svW9vA?a=uoxhFkG4M9MZqQbncAJBOYGBnultfdVSksiVfayysRka' id='VHY9CA2I5me' alt='' width='800' height='429'></img></div>You may get a warning when you connect. Go ahead and click the connect button.<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/FJypPRD3SwpmG0a3GlPZIQ?a=d3uiPPtWaq2Dmt0iiQGO1i1fHxo9MQ0S99iX22aaaLMa' id='VHY9CA5QZGT' alt=''></img></div><br/>
+
+You need to connect with the same AD credentials that you logged into the Client VPN Endpoint with. Your RDP client may default the user to your local machine’s current user. Click the “More choices” link and “Use a different account” option.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/OAUFmFXqHA3pwQc7aIktvA?a=NjgT6EbKu6VaCDn2v1Te0qkuogRF5Rnyy0zHNf7T0D4a' id='VHY9CA4zipy' alt=''></img></div><br/>
+
+Your username needs to be a combination of your NetBIOS shortname and the “admin” username. You would have specified the shortname as the <code>corporateNetBiosShortName</code> value in the “Set your deployment preferences” section above. If you left the default value, the username will be: “corp\admin”. <br/>
+
+<br/>
+
+Your password is the same password you used to log into the VPN as described in the “Connect to the VPN” section above. You can get that same value again from Secrets Manager in the master account if you need to.<br/>
+
+<br/>
+
+Click OK and you will get automatically logged into the Domain Controller Console instance. <br/>
+
+<br/>
+
+When the instance comes up, click the Windows icon in the bottom left corner and type in “Active Directory Users and Computers” and open the app. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/zcq-Jitkv7eva7zNlUc9xQ?a=GxjlQi6HX0PalmjNR2qsTJJwFLJkjkmK1uczWS8HRrka' id='VHY9CA17JPI' alt='' width='800' height='449'></img></div><br/>
+
+The snapin will automatically connect to Active Directory as the domain administrator (because you are logged in as the domain admin).<br/>
+
+<br/>
+
+To start creating groups/users, expand the tree down from “yourcompany.com” to “yourshortname” to “Users”. For example:<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/eONsc_MowKEpHRIWhI0uHw?a=Vk8jlSWtQFauSQhcZgMAqps9VEi7mEP6Qaxg6Fo7doEa' id='VHY9CApy7FF' alt='' width='800' height='431'></img></div><br/>
+
+You will see 4 items in the list:<br/>
+
+<br/>
+
+<div data-section-style='5' class="" style=""><ul id='VHY9CAklNv7'><li id='VHY9CAj5bW5' class='' value='1'>Admin - This USER is created automatically by AWS directory services and the user you are currently logged in as.
+
+<br/></li><li id='VHY9CAKKO6m' class=''>svc_adconnector - This USER is a service account used by the AD Connectors in the Transit and Research accounts to connect to the domain controller.
+
+<br/></li><li id='VHY9CAMjghY' class=''>Connectors - This GROUP gives permissions for the AD connectors in the Transit and Research accounts.
+
+<br/></li><li id='VHY9CA9wjFe' class=''>CorporateVpnUsers - This GROUP gives members permissions to connect to the Transit VPN solution. You will notice Admin is already a member of this group.
+
+<br/></li></ul></div>At this point, you can start creating groups and individual users as you see fit. <br/>
+
+<br/>
+
+Start by creating a user for yourself. <br/>
+
+<br/>
+
+If you want to allow someone else to connect to the VPN, create a user for them and add them to the CorporateVpnUsers group.<br/>
+
+<br/>
+
+In the next step, we are going to give AWS permissions based on the AD groups you create. We recommend that you create the following groups and add the user you created for yourself to them.<br/>
+
+<br/>
+
+ResearchAccountAdmins<br/>
+
+ResearchAccountUsers<br/>
+
+TransitAccountAdmins<br/>
+
+MasterAccountAdmins<br/>
+
+AuditAccountAdmins<br/>
+
+LoggingAccountAdmins<br/>
+
+<br/>
+
+We will associate these groups to AWS IAM  permissions in the next step.<br/>
+
+<br/>
+
+For the most part, non-IT staff will never need AWS permissions on the Transit/Master/Audit/Logging accounts and should likely never be added to those groups. <br/>
+
+<br/>
+
+<h2 id='VHY9CA8f8SH'>Switch AWS SSO to use AWS Directory Services</h2>
+
+Up to this point, the AWS SSO service that AWS Control Tower setup for you in the master account has been using the AWS SSO Directory. Because we are maintaining users/groups in Active Directory, we are going to change AWS SSO to use AD instead. Log into the master account and navigate to the AWS SSO service page. <br/>
+
+<br/>
+
+Click on the “Directory” section.<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/Ghlo32OkOfNzu2g2tDVPwQ?a=yXb5gUpYOaYOjrHZJmCqcsZNdTpeLuXlpyTVwk2SQk4a' id='VHY9CAHLbDT' alt='' width='800' height='429'></img></div><br/>
+
+Click on the “Change directory” link.<br/>
+
+<br/>
+
+Choose “Microsoft AD directory”.<br/>
+
+<br/>
+
+The identity stack’s AD environment should be prepopulated in the “Existing directories" drop down. Click Next.<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/mz6J_ARbxxIJzKBBhzQxfA?a=J4KwQ1E6OhgTdTgEQxjDJocVg27kzqC8D76Ccwju7aAa' id='VHY9CA26zCc' alt='' width='800' height='429'></img></div><br/>
+
+You will get a warning that that all existing permissions will be removed. Type “CONFIRM” to acknowledge this. <br/>
+
+<br/>
+
+It should only take a few seconds. You should see the following if it completed successfully. <br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/4uGqlTdMHQcH9C9dU-bHng?a=ARzXdDaOQfal63IyaaX5a9oQb43S1ZlLfhqIxYTKoB8a' id='VHY9CALC8Wx' alt='' width='800' height='429'></img></div><br/>
+
+Click on the “Proceed to the directory” button. Then navigate the “AWS accounts” page in the AWS SSO console.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/xPTJXCZK1nGPRV73VUWReg?a=ucPJukSgQ3A2kzabzZDaGVpDtcuPe5Z7vGfXLe0V63Aa' id='VHY9CANISd1' alt='' width='800' height='429'></img></div><br/>
+
+Its from here that we assign Active Directory users or groups IAM permissions. Lets start off giving access to the master account. <br/>
+
+<br/>
+
+Check the box next to the master account on the list and click the “Assign users” button. <br/>
+
+<br/>
+
+You will see a search box come up to search for group names. Search for the group name you created earlier that you want to give master account admin privileges too. If you followed the recommended group names above, it would be “MasterAccountAdmins”. (Make sure you added yourself to that group  as described in the “Create your desired AD users and groups“ section above) Then click ”Next: Permissions sets“.<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/j3CI62gDvGnQBm3863EiTQ?a=frV9zabtGfa6X40X44kbGWvh9qYLV01TPvoADqTmDO8a' id='VHY9CAb4cau' alt='' width='800' height='429'></img></div><br/>
+
+Now we are about to assign permissions to users of that group on the account we selected. In order to give members of this group full administrator access to the account, we just need to check the “AWSAdministratorAccess” policy and click finish. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/X7ACbgj3oeHyzTslMwYSpg?a=W5aWjkyMrZ27rbB8raaJQtH4aLoQQT4nxhM577U9gDUa' id='VHY9CAa8e13' alt='' width='800' height='429'></img></div><br/>
+
+As you can see, there are other types of pre-built permission sets that you can assign to users or create your own. You can also select multiple permissions sets for the group. If a users has multiple permissions sets, they will see an option to login to the account for each permission set the belong to. For example, you may want to give users the option of escalating their privileges or emulating another role’s permissions. <br/>
+
+<br/>
+
+Repeat this process for the Transit, Research, Audit, and Log Archive accounts based on the groups or users you created in Active Directory. <br/>
+
+<h2 id='VHY9CAEcZe0'>Log into your AWS Portal and conquer</h2>
+
+Go back to the AWS SSO Dashboard and copy the “User portal URL”.<br/>
+
+<br/>
+
+This URL is the entry point for for all users who need access to the AWS Console, CLI, or SDKs. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/tKz57e8lZjmr2L2fmQm_-g?a=qEtXPmE67HQ73BwpmtRdcGJdPavhzPTPonIMyNNSjSAa' id='VHY9CA9dik2' alt='' width='800' height='429'></img></div><br/>
+
+Go ahead and visit that URL and login with the Active Directory username and password you created for yourself earlier. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/9HI7xYtTMlGBH6WRZMZuKw?a=o1k6jFdw3MHNm3NrKvPAxvpt3E3a34hP9OrX3OoeVZQa' id='VHY9CAQVqj0' alt='' width='800' height='429'></img></div>Expand the various accounts to access the management console or obtain AWS access keys and secret keys. In the image below, all of the accounts are listed as an illustration. If the logged in user only had access to one account, they would only see one account listed (or get logged in automatically).<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/j2Lj_ZfVz9zoaXdiA4CYgg?a=QO8XrwVWoV8kug9Ff79iX5KF9AFAXlapOXFv23s3JRIa' id='VHY9CAL1nJS' alt='' width='800' height='429'></img></div><h2 id='VHY9CALjcAD'>Giving account access to other users</h2>
+
+In order to allow others to connect to the VPN or the AWS console you need to provide them with 3 things:<br/>
+
+<div data-section-style='5' class="" style=""><ul id='VHY9CAnMtqU'><li id='VHY9CAdWfeK' class='' value='1'>Active Directory Credentials - Whatever username and password you created for them
+
+<br/></li><li id='VHY9CAOdZ48' class=''>For VPN Access, give them the same TransitVPN.ovpn file that you downloaded earlier and connected with. That file contains no passwords and can be shared safely among members of your company. Each user will be logging in with their own unique AD credentials you created for them.
+
+<br/></li><li id='VHY9CA9S4XN' class=''>For AWS Console access, give them the “User portal URL” from the AWS SSO page that you just logged in with. They will need to log in with their AD credentials. 
+
+<br/></li></ul></div><br/>
+
+<br/>
