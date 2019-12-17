@@ -1,23 +1,11 @@
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/a97a2tUIs8ZnsloZV9h1xQ?a=76Z38CfplUVzTdS0U8cbWJ4t9falQnQPdrGdchXXOoca' id='VHY9CAgfWbG' alt='' width='800' height='495'></img>
+</div>
 
 <h1>Biotech Blueprint 2.0 Deployment Instructions</h1>
 
 <h2 id='VHY9CAhrS7E'>Create a new Master Account</h2>
 
-<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/a97a2tUIs8ZnsloZV9h1xQ?a=76Z38CfplUVzTdS0U8cbWJ4t9falQnQPdrGdchXXOoca' id='VHY9CAgfWbG' alt='' width='800' height='495'></img></div><span bgcolor="#ffcdcc" style="background-color:#ffcdcc">INTERNAL AWS ONLY INSTRUCTIONS</span><br/>
-
-<br/>
-
-<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">In order to create a master account for testing the deployment, you need to go through a few extra steps after creating the account in Isengard to give it the necessary fraud score to launch control tower. </span><br/>
-
-<br/>
-
-<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">Follow these instructions, but wait to register the child accounts with Isengard until you finish this guide. </span><br/>
-
-<span bgcolor="#ffcdcc" style="background-color:#ffcdcc"><a href="https://w.amazon.com/bin/view/AWS_Control_Tower_Service/Internal_Testing_and_Deployment/">https://w.amazon.com/bin/view/AWS_Control_Tower_Service/Internal_Testing_and_Deployment/</a></span><br/>
-
-<br/>
-
-<span bgcolor="#ffcdcc" style="background-color:#ffcdcc">END INTERNAL AWS SPECIFIC INSTRUCTIONS</span><br/>
+Ideally, this is a fresh new account. Control Tower will not work if the master account has already been enrolled into an AWS Organizations relationship as either the payer or a linked account.
 
 <h2 id='VHY9CAgpq9k'>Setup the Control Tower Landing Zone</h2>
 
