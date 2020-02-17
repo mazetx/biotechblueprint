@@ -1,11 +1,11 @@
 <div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/a97a2tUIs8ZnsloZV9h1xQ?a=76Z38CfplUVzTdS0U8cbWJ4t9falQnQPdrGdchXXOoca' id='VHY9CAgfWbG' alt='' width='800' height='495'></img>
 </div>
 
-<h1>Biotech Blueprint 2.0 Deployment Instructions</h1>
+<h1 id='VHY9CA4fYcj'>Biotech Blueprint 2.0 Deployment Instructions</h1>
 
 <h2 id='VHY9CAhrS7E'>Create a new Master Account</h2>
-
 Ideally, this is a fresh new account. Control Tower will not work if the master account has already been enrolled into an AWS Organizations relationship as either the payer or a linked account.
+<br/>
 
 <h2 id='VHY9CAgpq9k'>Setup the Control Tower Landing Zone</h2>
 
@@ -405,10 +405,6 @@ At this point, you can directly connect your local machine to Active Directory a
 
 To connect to the host, log into the master account AWS console and visit the EC2 service page. Under “Instances”, you will see the “Domain Controller Console”. Right click on that instance and choose connect. <br/>
 
-<br/>
-
-Todo:// need to add instructions on adding RDP ingress rule to security group attached to domain controler<br/>
-
 <div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/hYM1mYdqUMsKc5QSqrrNBw?a=3GzvLehJLdzlw6aZWhSEv529uxceXkb5svtCZV51Vr8a' id='VHY9CALB9hV' alt='' width='800' height='429'></img></div><br/>
 
 Click on the “Download Remote Desktop File” and open it with your remote desktop client:<br/>
@@ -465,7 +461,7 @@ You will see 4 items in the list:<br/>
 
 <br/>
 
-Start by creating a user for yourself. <br/>
+Start by creating a user for yourself. Make sure you add yourself to the CorporateVpnUsers group.<br/>
 
 <br/>
 
@@ -588,5 +584,131 @@ In order to allow others to connect to the VPN or the AWS console you need to pr
 <br/></li><li id='VHY9CA9S4XN' class=''>For AWS Console access, give them the “User portal URL” from the AWS SSO page that you just logged in with. They will need to log in with their AD credentials. 
 
 <br/></li></ul></div><br/>
+
+<h2 id='VHY9CA1jMMq'>Creating and enrolling a new account into the Blueprint</h2>
+
+At this point, you can begin your work in the shared research account that was created during the initial Biotech Blueprint deployment. You may now want to create a new account for a specific department in your company, HIPAA/clinical boundary, a CRO, a university, a partner, a consultant, an internal team, a production/test/development, or even for individual developer sandboxes. Any time you want to create a strong account-level boundary between resources created by AWS, you should consider following this process.<br/>
+
+<br/>
+
+From the master account, you will need to visit the Control Tower console and click the “Provision new account” button:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/LjAtM0p-oReAgSSQnsffSg?a=EjvthwaQnyx2Bv5XQdK373ay1SYixlNWaDsYlztlNfQa' id='VHY9CAtK4tX' alt='' width='800' height='429'></img></div><br/>
+
+From there, launch the “Account Factory” product:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/rJiM7dHhV6Q1RJwa4CicVg?a=NoAY3CXV1gh5OVoqeXiA86OA952MpVnv0L5vy66urPoa' id='VHY9CA1CwbZ' alt='' width='800' height='429'></img></div><br/>
+
+For the purposes of this walkthrough, I’m going to pretend we are creating an account for a fictional Contract Research Organization (CRO) called CRO-ATX. Provide a name for the stack:<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/xaBTaQrxf05nfYj-QfcILg?a=fEdeJ6HZYtEn6BReNamcsX6RvL7lmptOA9sA50ABOLQa' id='VHY9CAM78CN' alt='' width='800' height='429'></img></div><br/>
+
+You will need to supply the following parameters. You may be confused by the SSO* parameters. Didn't we switch SSO to use Active Directory instead of the AWS SSO identity store? The Account Factory portion of Control Tower still requires you supply the values but it does not use them.<br/>
+
+<div data-section-style='13'><table id='VHY9CAxB1zS' title='Sheet3' style='width: 49.4138em'><tbody><tr id='VHY9CAJ449K'><td id='s:VHY9CAJ449K;VHY9CAKlfk9' style='' class='bold'>Parameter Name
+
+<br/></td><td id='s:VHY9CAJ449K;VHY9CAtvh0a' style='' class='bold'>Reccomended Value
+
+<br/></td><td id='s:VHY9CAJ449K;VHY9CA4Uf5R' style='' class='bold'>Notes
+
+<br/></td></tr><tr id='VHY9CAYmgaj'><td id='s:VHY9CAYmgaj;VHY9CAKlfk9' style=''>SSO User Email
+
+<br/></td><td id='s:VHY9CAYmgaj;VHY9CAtvh0a' style=''>admin-[groupname]@yourcompany.com
+
+<br/></td><td id='s:VHY9CAYmgaj;VHY9CA4Uf5R' style=''>Replace with your company name
+
+<br/></td></tr><tr id='VHY9CADBHCz'><td id='s:VHY9CADBHCz;VHY9CAKlfk9' style=''>Account Email
+
+<br/></td><td id='s:VHY9CADBHCz;VHY9CAtvh0a' style=''>admin-[groupname]@yourcompany.com
+
+<br/></td><td id='s:VHY9CADBHCz;VHY9CA4Uf5R' style=''>Replace with your company name
+
+<br/></td></tr><tr id='VHY9CA5rBou'><td id='s:VHY9CA5rBou;VHY9CAKlfk9' style=''>SSO User First Name
+
+<br/></td><td id='s:VHY9CA5rBou;VHY9CAtvh0a' style=''>Admin
+
+<br/></td><td id='s:VHY9CA5rBou;VHY9CA4Uf5R' style=''>
+
+<br/></td></tr><tr id='VHY9CANyKSd'><td id='s:VHY9CANyKSd;VHY9CAKlfk9' style=''>SSO User Last Name
+
+<br/></td><td id='s:VHY9CANyKSd;VHY9CAtvh0a' style=''>[Group Name]
+
+<br/></td><td id='s:VHY9CANyKSd;VHY9CA4Uf5R' style=''>The logical name of the group you are creating the account for
+
+<br/></td></tr><tr id='VHY9CALzF0Z'><td id='s:VHY9CALzF0Z;VHY9CAKlfk9' style=''>Managed Org Unit
+
+<br/></td><td id='s:VHY9CALzF0Z;VHY9CAtvh0a' style=''>Custom
+
+<br/></td><td id='s:VHY9CALzF0Z;VHY9CA4Uf5R' style=''>Drop down field. You will only see this option.
+
+<br/></td></tr><tr id='VHY9CA0hPAO'><td id='s:VHY9CA0hPAO;VHY9CAKlfk9' style=''>Account Name
+
+<br/></td><td id='s:VHY9CA0hPAO;VHY9CAtvh0a' style=''>[Group Name]
+
+<br/></td><td id='s:VHY9CA0hPAO;VHY9CA4Uf5R' style=''>The logical name of the group you are creating the account for
+
+<br/></td></tr></tbody></table></div>Click through the wizard prompts accepting the default values and click the “Launch” button on the final review page. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/SJASVJ06YQ9hEqq_yZu8-w?a=FJ3B5kG6ar1jRA2SWMBH8ljqMCHavpa5WlMBVe3yzkwa' id='VHY9CAMls09' alt='' width='800' height='429'></img></div><br/>
+
+Set another time for 20 minutes, watch some cat videos or get a coffee. After about 20 minutes you should see the deployment has succeeded under the “Status” section.<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/I_h_lofIzxJiigWu7-JFGQ?a=a5g6NY7LnNakXRNlmaWmZN7OXrPIpi05N8k6GVZjq1ga' id='VHY9CACxuTo' alt='' width='800' height='429'></img></div><br/>
+
+Now, we need to give yourself administrator access to that environment. Visit the AWS SSO console’s “AWS Accounts” section, select the checkbox next to the new account, and click the “Assign users” button.<br/>
+
+<br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/X7G8Y5grkPlhq_-b_DtaLg?a=YSGfTCUVVaaXys9pJZEEJqDgi9RZru2xBNADzmEs8QQa' id='VHY9CAv0xQ3' alt='' width='800' height='429'></img></div>Search for yourself or an AD group you created earlier and move on to the permission sets page. Choose the “AWSAdministratorAccess” permission set and click the “Finish” button. <br/>
+
+<div data-section-style='11' style='max-width:100%'><img src='https://quip-amazon.com/blob/VHY9AAorigC/n8rwqHxLqT7JmW4ImHW4WQ?a=NbOaeuuhoPYbmLaOEq90OaEVcuoeo96MaTjiztO60VEa' id='VHY9CANzr2v' alt='' width='800' height='429'></img></div><br/>
+
+Now that we have the account created, we need to ‘enroll’ it into the Transit and Identity stacks. This sets up the necessary networking infrastructure required to integrate with the transit and identity solutions the blueprint has deployed. <br/>
+
+<br/>
+
+The Biotech Blueprint follows a ‘infrastructure as code’ philosophy, so to deploy the necessary components we are going to extend the Biotech Blueprint code base and begin customizing to your company. Dont worry, this only involves adding a few lines to the end of 2 files.<br/>
+
+<br/>
+
+Open back up the Cloud9 environment in the Master account we used to deploy the blueprint.<br/>
+
+<br/>
+
+You will likely need to refresh the ~/.aws/credentials file like we did before. Follow the instructions in the “Prepare Your AWS Credentials File” section above, but this time add the additional account profile. It should now look something like this<br/>
+
+<pre id='VHY9CADuFAy'><br>[research]<br>aws_access_key_id = AS....GZ<br>aws_secret_access_key = 3ZE.....Qk<br>aws_session_token = IQoJb3J.....QDcjvOBA<br>region=us-east-1<br><br>[master]<br>aws_access_key_id = A...OI<br>aws_secret_access_key = Q....EUJz+<br>aws_session_token = IQoJ....wcYKP<br>region=us-east-1<br><br>[transit]<br>aws_access_key_id = ASI....Y77<br>aws_secret_access_key = 0vaFfY....5s<br>aws_session_token = IQoJb3...GpgmTbs<br>region=us-east-1<br><br>[CROatx]<br>aws_access_key_id = AS.....JCY<br>aws_secret_access_key = 2RF......EgIq<br>aws_session_token = IQoJb3J.....y3Tsm<br>region=us-east-1</pre>
+
+Now, open up the <code>biotechblueprint\cdk.json </code>file.<br/>
+
+<br/>
+
+For demonstration, we are using a fictional CRO called “CROatx”. In the following three snippets, do a find/replace for “CROatx” to a more appropriate name for the account you are creating. It needs to start with a capital letter, no spaces, no hyphens.<br/>
+
+<br/>
+
+Add the following <b>bolded </b>properties to the end of  the <code>context</code> property. <br/>
+
+<pre id='VHY9CA7an0d'>{<br>  "app": "npx ts-node bin/bb-20.ts",<br>  "requireApproval": "never",<br>  "context": {<br>        ....<br><b>    </b><b>"envCROatxAccountId"</b><b>:</b><b> </b><b>"XXXXXXXXX"</b><b>,</b><br><b>    </b><b>"CROatxTgAttachmentSecretArn"</b><b>:</b><b> </b><b>"XXXXXXXXXXXXX"</b><b>,</b><br><b>    </b><b>"CROatxVpcCidrSecretArn"</b><b>:</b><b> </b><b>"XXXXXXXXXXXXX"</b><br>  }<br>}</pre>
+
+Leave the <code><b>XXXXXXXXXXXXX</b></code><b> </b>values as Xs. The script automatically populates them.<br/>
+
+<br/>
+
+Now, open up the file <code>biotechblueprint\bin\bb-20.ts </code>and scroll down to the bottom.<br/>
+
+<br/>
+
+You will see an ‘example’ section where you can uncomment lines as necessary.  Again, find replace CROatx with the more meaningful name you used for the snippet above. <br/>
+
+<pre id='VHY9CANaR3b'>/////////////////////////////////////////<br>/// Example of how to onboard an additional account into the Blueprint<br>/// Just find and replace 'CROatx' below with a more meaningful account name (must start with a capital letter, no spaces/numbers/hyphens)<br>/// Then uncomment the lines of code below. <br><br><br>// Example:<br>const envCROatx =   { account: app.node.tryGetContext("envCROatxAccountId"), desiredVpcCidr: "13.0.0.0/16"};<br>const CROatxAccount = new childAccountStack(app,'CROatxAccountStack', {env: envCROatx, desiredVpcCidr: envCROatx.desiredVpcCidr, desiredVpcName: "CROatxVpc"});<br><br><br>/// Here you need to make a descion about what the account should have access to.<br>/// Do you want users of this account to access resources via VPN in the transit stack? You need to instantiate the TransitToCROatxVpcRoute and CROatxToTransitVpcRoute<br>/// Do you want users/resources in this account to be able to route into the research vpc and vice versa? You need to instantiate ResearchToCROatxVpcRoute and CROatxToResearchVpcRoute<br>/// Do you want users/resources of this account need to communicate with the domain controller in the identity stack? You need to instantiate IdentityToCROatxVpcRoute and CROatxToIdentityVpcRoute<br><br>// Example:<br>const CROatxToTransitVpcRoute = new VpcRouteTableTransitRouteStack(app,'CROatxToTransitVpcRoute', {<br>  env: envCROatx,   destinationCidr: envTransit.desiredVpcCidr,   targetVpc: CROatxAccount.Vpc });<br>const TransitToCROatxVpcRoute = new VpcRouteTableTransitRouteStack(app,'TransitToCROatxVpcRoute', {<br>  env: envTransit,   destinationCidr: envCROatx.desiredVpcCidr,   targetVpc: transitAccount.vpc });<br>  <br>const CROatxToIdentityVpcRoute = new VpcRouteTableTransitRouteStack(app,'CROatxToIdentityVpcRoute', {<br>  env: envCROatx,   destinationCidr: envIdentity.desiredVpcCidr,   targetVpc: CROatxAccount.Vpc });<br>const IdentityToCROatxVpcRoute = new VpcRouteTableTransitRouteStack(app,'IdentityToCROatxVpcRoute', {<br>  env: envIdentity,   destinationCidr: envCROatx.desiredVpcCidr,   targetVpc: identityAccount.Vpc });<br>  <br>const CROatxToResearchVpcRoute = new VpcRouteTableTransitRouteStack(app,'CROatxToResearchVpcRoute', {<br>  env: envCROatx,   destinationCidr: envResearch.desiredVpcCidr,   targetVpc: CROatxAccount.Vpc });  <br>const ResearchToCROatxVpcRoute = new VpcRouteTableTransitRouteStack(app,'ResearchToCROatxVpcRoute', {<br>  env: envResearch,   destinationCidr: envCROatx.desiredVpcCidr,   targetVpc: researchAccount.Vpc });  <br><br>const CROatxTransitEnrolledAccountStack = new TransitEnrolledAccount(app,'CROatxTransitEnrolledAccountStack', {<br>  env: envTransit,<br>  AccountDescription: "CROatx",<br>  AccountToEnrollVpcCidr: envCROatx.desiredVpcCidr,<br>  targetVpcTransitSecretsArn: app.node.tryGetContext("CROatxTgAttachmentSecretArn"),<br>  transitVPCRouteTableSecretsArn: app.node.tryGetContext("transitGatewayRouteTableSecretArn"),<br>  targetVPCCidrRangeSecretsArn: app.node.tryGetContext("CROatxVpcCidrSecretArn")<br>});<br><br>/// END -  Example of how to onboard an additional account into the Blueprint<br>/////////////////////////////////////////</pre>
+
+Now, open up the file <code>biotechblueprint\deployBiotechBlueprint.sh </code>and scroll down to the bottom.<br/>
+
+<br/>
+
+You will see another example section where you can uncomment the commands and find/replace the CROatx <br/>
+
+<pre id='VHY9CAbmEHC'>#########################################################<br>### Example of how to onboard an additional account into the Blueprint<br>### ...<br><br>CROatxAcctId="$(aws sts get-caller-identity --profile CROatx --query "Account" --output text)"<br>jq '.context.envCROatxAccountId = $accountID' --arg accountID $CROatxAcctId cdk.json &gt; tmp.$$.json &amp;&amp; mv tmp.$$.json cdk.json<br>cdk deploy CROatxAccountStack --context transitGatewaySecretArn=$transitGatewayIdSecretArn --profile CROatx<br><br>CROatxGatewayAttachment="$(aws secretsmanager get-secret-value --secret-id ga --profile CROatx | grep -Po 'tgw-attach-.{17}')"<br>aws secretsmanager put-secret-value --secret-id ga --secret-string $CROatxGatewayAttachment --profile CROatx<br>CROatxTgAttachmentSecretArn="$(aws secretsmanager get-secret-value --secret-id ga --profile CROatx | grep -Po 'arn:aws:secretsmanager.*ga')"<br>CROatxVpcCidr="$(aws secretsmanager get-secret-value --secret-id vc --profile CROatx | grep -Po '[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}/..')"<br>aws secretsmanager put-secret-value --secret-id vc --secret-string $CROatxVpcCidr --profile CROatx<br>CROatxVpcCidrSecretArn="$(aws secretsmanager get-secret-value --secret-id vc --profile CROatx | grep -Po 'arn:aws:secretsmanager.*vc')"<br><br>cdk deploy CROatxToTransitVpcRoute CROatxToIdentityVpcRoute CROatxToResearchVpcRoute \<br>    --context transitGatewaySecretArn=$transitGatewayIdSecretArn \<br>    --profile CROatx <br><br>cdk deploy ResearchToCROatxVpcRoute \<br>    --context transitGatewaySecretArn=$transitGatewayIdSecretArn \<br>    --profile research     <br>    <br>cdk deploy IdentityToCROatxVpcRoute \<br>    --context transitGatewaySecretArn=$transitGatewayIdSecretArn \<br>    --profile master <br>    <br>cdk deploy TransitToCROatxVpcRoute \<br>    --context transitGatewaySecretArn=$transitGatewayIdSecretArn \<br>    --profile transit     <br>    <br><br>cdk deploy CROatxTransitEnrolledAccountStack \<br>    --context identityAccountAdConnectorSecretArn=$identityAccountAdConnectorSecretArn \<br>    --context identityAccountAdConnectorSecretKeyArn=$identityAccountAdConnectorSecretKeyArn \<br>    --context transitGatewayRouteTableSecretArn=$transitGatewayRouteTableSecretArn \<br>    --context CROatxTgAttachmentSecretArn=$CROatxTgAttachmentSecretArn \<br>    --context CROatxVpcCidrSecretArn=$CROatxVpcCidrSecretArn \<br>    --profile transit         </pre>
 
 <br/>
